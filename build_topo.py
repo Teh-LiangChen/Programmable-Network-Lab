@@ -52,19 +52,35 @@ def check_mine(spec):
 
 
 def check(spec):
-    """Return a list of problems in the description (an empty list means it looks fine).
+    """Return a list of problems in the description (an empty list means it looks good).
 
-    Week 2 task: report any IP address that is used by more than one host.
+    Week 2 task: report any IP address used by more than one host, and
+    verify that every link connects devices (hosts or switches) that exist.
     """
     problems = []
-    seen_addresses = {}
+    
+    # Collect all valid device names (hosts + switches)
+    valid_devices = set()
+    
+    if "hosts" in spec:
+        for host in spec["hosts"]:
+            if "name" in host:
+                valid_devices.add(host["name"])
+                
+    if "switches" in spec:
+        for switch in spec["switches"]:
+            if "name" in switch:
+                valid_devices.add(switch["name"])
 
-    for host in spec["hosts"]:
-        host_name = host.get("name","unknown")
+    # 1. Check duplicate IP addresses
+    seen_addresses = {}  # Maps address -> host name
+
+    for host in spec.get("hosts", []):
+        host_name = host.get("name", "unknown")
 
         for key in ("ip", "ipv6"):
             if key not in host:
-               continue
+                continue
 
             address = host[key].split("/")[0]
 
@@ -73,6 +89,16 @@ def check(spec):
                 problems.append(f"PROBLEM: {host_name} and {first_host} both use {address}")
             else:
                 seen_addresses[address] = host_name
+
+    # 2. Check that all link endpoints exist in valid_devices
+    for link in spec.get("links", []):
+        for endpoint_key in ("a", "b"):  # assuming links use 'a' and 'b' keys for endpoints
+            if endpoint_key not in link:
+                continue
+            
+            device_name = link[endpoint_key]
+            if device_name not in valid_devices:
+                problems.append(f"PROBLEM: link references non-existent device {device_name}")
 
     return problems
 
