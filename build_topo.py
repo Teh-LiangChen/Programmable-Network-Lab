@@ -89,13 +89,12 @@ def check(spec):
 
     if "switches" in spec:
         for switch in spec["switches"]:
-            if "name" in switch:
-                valid_devices.add(switch["name"])
+            valid_devices.add(switch["name"])
 
     for link in spec["links"]:
         for device_name in link:
             if device_name not in valid_devices:
-                problems.append(f"PROBLEM: link references non-existent device {device_name}")
+                problems.append(f"link references non-existent device {device_name}")
     
     return problems
 
