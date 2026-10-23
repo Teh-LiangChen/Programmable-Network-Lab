@@ -59,24 +59,11 @@ def check(spec):
     """
     problems = []
     
-    # Collect all valid device names (hosts + switches)
-    valid_devices = set()
-    
-    if "hosts" in spec:
-        for host in spec["hosts"]:
-            if "name" in host:
-                valid_devices.add(host["name"])
-                
-    if "switches" in spec:
-        for switch in spec["switches"]:
-            if "name" in switch:
-                valid_devices.add(switch["name"])
-
     # 1. Check duplicate IP addresses
     seen_addresses = {}  # Maps address -> host name
 
-    for host in spec.get("hosts", []):
-        host_name = host.get("name", "unknown")
+    for host in spec["hosts"]:
+        host_name = host["name"]
 
         for key in ("ip", "ipv6"):
             if key not in host:
@@ -91,15 +78,25 @@ def check(spec):
                 seen_addresses[address] = host_name
 
     # 2. Check that all link endpoints exist in valid_devices
-    for link in spec.get("links", []):
-        for endpoint_key in ("a", "b"):  # assuming links use 'a' and 'b' keys for endpoints
-            if endpoint_key not in link:
-                continue
-            
-            device_name = link[endpoint_key]
+
+    # Collect all valid device names (hosts + switches)
+    valid_devices = set()
+
+    if "hosts" in spec:
+        for host in spec["hosts"]:
+            if "name" in host:
+                valid_devices.add(host["name"])
+
+    if "switches" in spec:
+        for switch in spec["switches"]:
+            if "name" in switch:
+                valid_devices.add(switch["name"])
+
+    for link in spec["links"]:
+        for device_name in link:
             if device_name not in valid_devices:
                 problems.append(f"PROBLEM: link references non-existent device {device_name}")
-
+    
     return problems
 
 def build(spec):
