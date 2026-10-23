@@ -89,7 +89,7 @@ def check(spec):
 
     if "switches" in spec:
         for switch in spec["switches"]:
-            valid_devices.add(switch["name"])
+            valid_devices.add(switch)
 
     for link in spec["links"]:
         for device_name in link:
