@@ -1,0 +1,45 @@
+# routes.yaml: the routes from Step 4, as data. Replace every NN (see "Your addresses").
+#
+#   python3 routers.py --id NNNN --routes routes.yaml
+#
+# checks every route first, then switches forwarding on and applies them. IPv4 only.
+
+student_id_last4: "4999"
+
+routers: [r1, r2, r3]
+
+lans:
+  - name: h1
+    router: r1
+    host: h1
+    network: 10.99.1.0/24
+  - name: h2
+    router: r2
+    host: h2
+    network: 10.99.32.0/24
+  - name: h3
+    router: r2
+    host: h3
+    network: 10.99.33.0/24
+
+links:
+  - [r1, r2, 10.99.12.0/30]
+  - [r1, r3, 10.99.13.0/30]
+  - [r3, r2, 10.99.23.0/30]
+
+routes:
+  r1:
+    - to: 10.99.32.0/24
+      via: 10.99.12.2
+    - to: 10.99.32.0/20
+      via: 10.99.13.2
+
+  r3:
+    - to: 10.99.32.0/20
+      via: 10.99.13.1
+    - to: 10.99.1.0/24
+      via: 10.99.13.1
+
+  r2:
+    - to: 10.99.1.0/24
+      via: 10.99.12.1

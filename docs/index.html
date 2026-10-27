@@ -15,18 +15,24 @@
 </head>
 <body>
 <h1>My network, built from data</h1>
-<p class="meta">Student ID ending 4999 · generated from <code>topology.yaml</code> by <code>make_page.py</code> on 2026-10-22</p>
+<p class="meta">Student ID ending 4999 · generated from <code>topology.yaml</code> by <code>make_page.py</code> on 2026-10-27</p>
 <p id="summary">3 switches, 6 hosts and 7 links, on IPv4 <code>10.99.0.0/16</code> and IPv6 <code>fd00:4999::/32</code>.
 The same file builds this network in Mininet and generates this page.</p>
-<p>Repository: <a id="repository" href="https://github.com/YOUR-USERNAME/YOUR-REPOSITORY">https://github.com/YOUR-USERNAME/YOUR-REPOSITORY</a></p>
+<p>Repository: <a id="repository" href="https://github.com/Teh-LiangChen/Programmable-Network-Lab">https://github.com/Teh-LiangChen/Programmable-Network-Lab</a></p>
 
 <h2>The network</h2>
 <section id="hosts"><table><thead><tr><th>Host</th><th>IPv4</th><th>IPv6</th><th>Switch</th></tr></thead><tbody><tr><td>h1</td><td><code>10.99.0.1/24</code></td><td><code>fd00:4999::1/64</code></td><td>s1</td></tr><tr><td>h2</td><td><code>10.99.0.2/24</code></td><td><code>fd00:4999::2/64</code></td><td>s1</td></tr><tr><td>h3</td><td><code>10.99.0.3/24</code></td><td><code>fd00:4999::3/64</code></td><td>s1</td></tr><tr><td>h4</td><td><code>10.99.0.4/24</code></td><td><code>fd00:4999::4/64</code></td><td>s2</td></tr><tr><td>h5</td><td><code>10.99.0.5/24</code></td><td><code>fd00:4999::5/64</code></td><td>s2</td></tr><tr><td>h6</td><td><code>10.99.0.6/24</code></td><td><code>fd00:4999::6/64</code></td><td>s2</td></tr></tbody></table></section>
 <h3>Links</h3>
-<section id="links"><p>TODO: list the links.</p></section>
+<section id="links"><ul><li>h1 — s1</li><li>h2 — s1</li><li>h3 — s1</li><li>h4 — s2</li><li>h5 — s2</li><li>h6 — s2</li><li>s1 — s2</li></ul></section>
 <h3>Diagram</h3>
 <pre class="mermaid" id="diagram">graph LR
-  todo[Diagram not generated yet]</pre>
+  h1[&quot;h1&lt;br&gt;10.99.0.1&quot;] --- s1
+  h2[&quot;h2&lt;br&gt;10.99.0.2&quot;] --- s1
+  h3[&quot;h3&lt;br&gt;10.99.0.3&quot;] --- s1
+  h4[&quot;h4&lt;br&gt;10.99.0.4&quot;] --- s2
+  h5[&quot;h5&lt;br&gt;10.99.0.5&quot;] --- s2
+  h6[&quot;h6&lt;br&gt;10.99.0.6&quot;] --- s2
+  s1 --- s2</pre>
 
 <h2>Evidence from the running network</h2>
 <section id="evidence"><h3>pingall: every host reaches every other</h3>
@@ -89,13 +95,13 @@ PROBLEM: PROBLEM: h2 and h1 both use fd00:4999::1
 Fix the description and try again.</pre></section>
 
 <h2>What I learned</h2>
-<section id="answers"><section id="answer-planes"><h3>Where are the data, control and management planes in your network?</h3><p>(Not answered yet.)</p></section>
-<section id="answer-learning"><h3>How did your switches learn which port leads to each host? Use your MAC table evidence.</h3><p>(Not answered yet.)</p></section>
-<section id="answer-kind"><h3>Which of the four kinds of programmability is this assignment (a network described as data, then built and documented by scripts)? Why isn&#x27;t it any of the other three?</h3><p>(Not answered yet.)</p></section>
-<section id="answer-two_am"><h3>Week 1&#x27;s 2 a.m. change on 40 switches: what would be different if those switches were described like your network?</h3><p>(Not answered yet.)</p></section>
-<section id="answer-model"><h3>What&#x27;s the difference between your network&#x27;s data model and its serialisation? Use YAML and JSON as the example.</h3><p>(Not answered yet.)</p></section>
-<section id="answer-check"><h3>Why is it better to catch bad data in check() than with pingall? What did IPv6 notice about a duplicate address that IPv4 didn&#x27;t?</h3><p>(Not answered yet.)</p></section>
-<section id="answer-git"><h3>What does your Git history give you that copying files into folders named topology-v2-final wouldn&#x27;t?</h3><p>(Not answered yet.)</p></section></section>
+<section id="answers"><section id="answer-planes"><h3>Where are the data, control and management planes in your network?</h3><p>data: switches, control: switch MAC table, management: python scripts and yaml file</p></section>
+<section id="answer-learning"><h3>How did your switches learn which port leads to each host? Use your MAC table evidence.</h3><p>By using MAC table and ARP. For example in evidence/macs.txt showing the MAC table of s1 where it will record down the MAC address of devices including itself.</p></section>
+<section id="answer-kind"><h3>Which of the four kinds of programmability is this assignment (a network described as data, then built and documented by scripts)? Why isn&#x27;t it any of the other three?</h3><p>Automated configuration. It is not externalised control because there is no any SDN controller, it is not programmable data because there is no customisation on the packet, it is not programmatic device because there is no use of API, NETCONF or RESTCONF.</p></section>
+<section id="answer-two_am"><h3>Week 1&#x27;s 2 a.m. change on 40 switches: what would be different if those switches were described like your network?</h3><p>It can be easily be done using script.</p></section>
+<section id="answer-model"><h3>What&#x27;s the difference between your network&#x27;s data model and its serialisation? Use YAML and JSON as the example.</h3><p>Network data model is a model describing the device interface, ip address etc, serialisation is just way to represent it, like the content of YAM and JSON are the same, just the way they represent the content differ.</p></section>
+<section id="answer-check"><h3>Why is it better to catch bad data in check() than with pingall? What did IPv6 notice about a duplicate address that IPv4 didn&#x27;t?</h3><p>Catch bad data in check() able to save time and giving us clear root cause. By using pingall we only able to know the devices cannot ping each other but need to waste time finding the reason behind it. IPv6 has a Duplicate Address Detection which IPv4 dont have.</p></section>
+<section id="answer-git"><h3>What does your Git history give you that copying files into folders named topology-v2-final wouldn&#x27;t?</h3><p>We can identified the difference line by line, put commit message and easily revert back to old version.</p></section></section>
 
 <script type="application/json" id="topology-data">{
   "student_id_last4": "4999",
