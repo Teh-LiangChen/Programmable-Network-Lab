@@ -1,6 +1,6 @@
 # Programmable Network Lab
 
-Coursework for **Programmable Network** (Universiti Malaya). Course-provided scripts build a
+Coursework for **Programmable Network**. Course-provided scripts build a
 routed network in Mininet from YAML files; this repo holds my work on top of them.
 
 ## What I did so far
